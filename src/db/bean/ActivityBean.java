@@ -11,9 +11,7 @@ public class ActivityBean extends GenericBean{
     {
         try
         {
-            ResultSet result = _objConnection.createStatement().executeQuery("select * from activity;");
-
-            return result;
+            return _objConnection.createStatement().executeQuery("select * from activity;");
         }
         catch(Exception ex)
         {
@@ -26,9 +24,7 @@ public class ActivityBean extends GenericBean{
     {
         try
         {
-            ResultSet result = _objConnection.createStatement().executeQuery("select * from activity where id =" + id + ";");
-
-            return result;
+            return _objConnection.createStatement().executeQuery("select * from activity where id =" + id + ";");
         }
         catch(Exception ex)
         {
@@ -41,9 +37,7 @@ public class ActivityBean extends GenericBean{
     {
         try
         {
-            int result = _objConnection.createStatement().executeUpdate("delete from activity where id =" + id + ";");
-
-            return result;
+            return _objConnection.createStatement().executeUpdate("delete from activity where id =" + id + ";");
         }
         catch(Exception ex)
         {
