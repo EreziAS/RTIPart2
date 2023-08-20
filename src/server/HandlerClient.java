@@ -1,5 +1,8 @@
 package server;
 
+import db.bean.ActivityBean;
+import protocol.FUCAMP;
+
 import java.io.*;
 import java.net.*;
 
@@ -44,14 +47,21 @@ public class HandlerClient extends Thread{
 
                 //Read the request
                 String line = receive.readLine();
+                System.out.println("HandlerClient "+this.getId()+" : Request received: " + line);
                 String request[] = line.split(";");
+                System.out.println("HandlerClient "+this.getId()+" : Request splitted: " + request[0] + " " + request[1] + " " + request[2]);
 
                 //Specify the protocol
 
                 switch (request[1])
                 {
                     case "FUCAMP":
+                        ActivityBean bean = new ActivityBean();
+                        bean.Connect("rti2","root","Rotko3");
+
                         System.out.println("HandlerClient "+this.getId()+" : FUCAMP");
+                        FUCAMP fucamp = new FUCAMP();
+                        fucamp.Processing(line, bean, receive, send);
                         break;
                     default:
                         System.out.println("HandlerClient "+this.getId()+" : Protocol not found");
@@ -70,6 +80,8 @@ public class HandlerClient extends Thread{
             }
         }
     }
+
+
 
 
 }

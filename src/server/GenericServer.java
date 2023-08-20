@@ -15,7 +15,7 @@ public class GenericServer extends Thread{
         this._waitingClient = new WaitingClient();
 
     }
-
+    @Override
     public void run()
     {
         System.out.println("Server running");
@@ -31,7 +31,11 @@ public class GenericServer extends Thread{
 
         while(!this.isInterrupted())
         {
-
+            try{
+                _waitingClient.AddSocketToWaitingLine(_serverSocket.accept());
+            }catch (IOException e) {
+                System.out.println("Error SocketServer: " + e);
+            }
         }
 
     }

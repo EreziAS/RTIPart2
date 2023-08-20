@@ -33,6 +33,32 @@ public class ActivityBean extends GenericBean{
         }
     }
 
+    public int updateActivity(int id, int nbrParticipantsInscr)
+    {
+        ResultSet result = getById(String.valueOf(id));
+        try
+        {
+            if(result.next()) {
+                int nbrParticipantsMax = result.getInt("max_participants");
+                int nbrRegisteredParticipants = result.getInt("participants_registered");
+                if (nbrParticipantsInscr+nbrRegisteredParticipants < nbrParticipantsMax)
+                {
+                    return _objConnection.createStatement().executeUpdate("update activity set participants_registered = " + (nbrParticipantsInscr+nbrRegisteredParticipants) + " where id =" + id + ";");
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Error SQL: " + ex.getMessage());
+            return 0;
+        }
+        return -1;
+    }
+
     public int DeleteById(String id)
     {
         try
