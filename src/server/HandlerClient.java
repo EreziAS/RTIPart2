@@ -1,7 +1,9 @@
 package server;
 
 import db.bean.ActivityBean;
+import db.bean.ReservationBean;
 import protocol.FUCAMP;
+import protocol.ROMP;
 
 import java.io.*;
 import java.net.*;
@@ -19,10 +21,12 @@ public class HandlerClient extends Thread{
 
     private WaitingClient _waitingClient;
     private Socket _clientSocket;
+    int _port;
 
-    public HandlerClient(WaitingClient waitingClient)
+    public HandlerClient(WaitingClient waitingClient, int port)
     {
         this._waitingClient = waitingClient;
+        this._port = port;
     }
 
     public void run()
@@ -45,34 +49,28 @@ public class HandlerClient extends Thread{
                 BufferedReader receive = new BufferedReader(new InputStreamReader(_clientSocket.getInputStream()));
                 PrintWriter send = new PrintWriter(_clientSocket.getOutputStream(), true);
 
-                //Read the request
-                String line = receive.readLine();
-                System.out.println("HandlerClient "+this.getId()+" : Request received: " + line);
-                String request[] = line.split(";");
-                System.out.println("HandlerClient "+this.getId()+" : Request splitted: " + request[0] + " " + request[1] + " " + request[2]);
-
-                //Specify the protocol
-
-                switch (request[1])
+                switch (_port)
                 {
-                    case "FUCAMP":
+                    case 50017:
+                        //FUCAMP
                         ActivityBean bean = new ActivityBean();
                         bean.Connect("rti2","root","Rotko3");
-
                         System.out.println("HandlerClient "+this.getId()+" : FUCAMP");
                         FUCAMP fucamp = new FUCAMP();
-                        fucamp.Processing(line, bean, receive, send);
+                        fucamp.Processing(bean, receive, send);
+                        break;
+                    case 50018:
+                        //ROMP
+                        System.out.println("HandlerClient "+this.getId()+" : ROMP");
+                        ReservationBean bean2 = new ReservationBean();
+                        bean2.Connect("rti2","root","Rotko3");
+                        ROMP romp = new ROMP();
+                        romp.Processing(bean2, receive, send);
                         break;
                     default:
                         System.out.println("HandlerClient "+this.getId()+" : Protocol not found");
                         break;
                 }
-
-
-
-
-
-
 
             }catch (Exception e)
             {

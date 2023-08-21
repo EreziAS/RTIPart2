@@ -14,6 +14,20 @@ public class GenericServer extends Thread{
         _port = port;
         this._waitingClient = new WaitingClient();
 
+
+
+        switch (port)
+        {
+            case 50017:
+                System.out.println("Server FUCAMP started");
+                break;
+            case 50018:
+                System.out.println("Server ROMP started");
+                break;
+            default:
+                System.out.println("Server started on port: " + port);
+                break;
+        }
     }
     @Override
     public void run()
@@ -44,7 +58,7 @@ public class GenericServer extends Thread{
     {
         for(int i = 0; i < 5; i++)
         {
-            HandlerClient threadClient = new HandlerClient(_waitingClient);
+            HandlerClient threadClient = new HandlerClient(_waitingClient,_port);
             threadClient.start();
         }
     }

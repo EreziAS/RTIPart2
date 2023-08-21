@@ -46,6 +46,31 @@ public class TestClient {
     }
 
     public static void TestROMP(){
+        try{
+            Socket socket = new Socket("localhost", 50018);
+            System.out.println("Socket created");
+
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println("50;ROMP;LOGIN;Alexis;Sacre");
+
+            System.out.println("Request sent");
+
+            BufferedReader receive = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String line = receive.readLine();
+
+            System.out.println("Response received: " + line);
+
+            out.println("50;ROMP;CROOM;1;BERNARD");
+
+            while((line = receive.readLine()) != null)
+            {
+                System.out.println("Response received: " + line);
+            }
+
+            socket.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
 
     }
 }

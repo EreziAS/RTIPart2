@@ -2,23 +2,26 @@ package protocol;
 
 import db.bean.ActivityBean;
 import db.bean.ActivityLoginBean;
-
-import javax.xml.transform.Result;
 import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+// FUCAMP PORT 50017
+
 public class FUCAMP {
-    private String[] _requestArray;
-    private ActivityBean _bean;
+
+
     private int _quit = 0;
     private boolean _isLogged = false;
+
+    private String request = null;
 
     public FUCAMP() {
 
     }
 
-    public void Processing(String request, ActivityBean bean, BufferedReader receive, PrintWriter send ) throws IOException, SQLException {
+    public void Processing(ActivityBean bean, BufferedReader receive, PrintWriter send ) throws IOException, SQLException {
 
         while(_quit == 0)
         {
@@ -100,7 +103,7 @@ public class FUCAMP {
                         {
                             send.println("00;FUCAMP;BOOK;Inscription OK");
                         }
-                        else if(result == 1)
+                        else if(result == 0)
                         {
                             send.println("00;FUCAMP;BOOK;Error max participants exceeded");
                         }
@@ -127,9 +130,4 @@ public class FUCAMP {
         }
     }
 
-    public void Display(){
-        for (int i = 0; i < _requestArray.length; i++) {
-            System.out.println(_requestArray[i]);
-        }
-    }
 }
